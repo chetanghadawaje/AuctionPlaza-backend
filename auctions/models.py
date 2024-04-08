@@ -10,11 +10,16 @@ class Bid(BaseModelLog):
     bidder = models.ForeignKey(Users, on_delete=models.CASCADE)
     bid_amount = models.DecimalField(max_digits=10, decimal_places=2)
     bid_time = models.DateTimeField(auto_now_add=True)
-    ip_address = models.GenericIPAddressField()
+    ip_address = models.GenericIPAddressField(blank=True, null=True)
     bid_completed_flag = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Bid for {self.product} by {self.bidder} at {self.bid_time}"
+
+    # def save(self, *args, **kwargs):
+    #     if not self.ip_address:
+    #         self.ip_address = request.META['REMOTE_ADDR']
+    #     super().save(*args, **kwargs)
 
 
 class BidApply(BaseModelLog):
