@@ -12,6 +12,6 @@ class CustomUserManager(UserManager):
         return user
 
 
-class User(AbstractUser):
+class Users(AbstractUser):
     username = models.EmailField(unique=True)
     mobile_number = models.CharField(max_length=10)
