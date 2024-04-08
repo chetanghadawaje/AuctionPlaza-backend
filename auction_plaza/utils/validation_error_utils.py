@@ -6,6 +6,7 @@ def get_error_message_in_serializer(serializer) -> str:
     return: error message string
     """
     error_message = ''
-    for flied_name, error in serializer.error.items():
-        error_message = f"{flied_name} {error[0]} {error_message}"
+    for flied_name, error in serializer.errors.items():
+        name_field = "" if flied_name in ('non_field_errors', None) else f"{flied_name}: "
+        error_message = f"{name_field}{error[0]} {error_message}"
     return error_message
