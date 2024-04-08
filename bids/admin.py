@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from auctions.models import Bid, BidApply
+from bids.models import Bid, BidApply
 
 
 class BidAdmin(admin.ModelAdmin):

@@ -6,8 +6,8 @@ from rest_framework.exceptions import ValidationError
 from django_filters.rest_framework import DjangoFilterBackend
 
 from auction_plaza.utils.validation_error_utils import get_error_message_in_serializer
-from auctions.models import Bid
-from auctions.serializers import BidSerializer
+from bids.models import Bid, BidApply
+from bids.serializers import BidSerializer, BidApplySerializer
 
 logger = logging.getLogger(__name__)
 
@@ -40,3 +40,12 @@ class BidViewSet(viewsets.ModelViewSet):
             data, message, status_code = [], 'Something went wrong', status.HTTP_500_INTERNAL_SERVER_ERROR
 
         return Response({"Data": data, "Message": message, 'Status': status_code}, status=status_code)
+
+
+class BidApplyViewSet(viewsets.ModelViewSet):
+    queryset = BidApply.objects.filter(is_active=True)
+    serializer_class = BidApplySerializer
+    http_method_names = ("get", "post")
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['product', 'user']
+

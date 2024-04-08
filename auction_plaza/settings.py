@@ -25,7 +25,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     # custom apps
-    "auctions",
+    "bids",
     "products",
     "users"
 ]
