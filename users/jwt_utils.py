@@ -16,3 +16,12 @@ def create_token(user):
     }
     token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
     return token
+
+
+def decode_token(token) -> dict:
+    """
+    decode token
+    : token: token string
+    """
+    token_dict = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+    return token_dict

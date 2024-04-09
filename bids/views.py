@@ -8,6 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from auction_plaza.utils.validation_error_utils import get_error_message_in_serializer
 from bids.models import Bid, BidApply
 from bids.serializers import BidSerializer, BidApplySerializer
+from users.auth_utils import Authenticated
 
 logger = logging.getLogger(__name__)
 
@@ -23,9 +24,7 @@ class BidViewSet(viewsets.ModelViewSet):
     queryset = Bid.objects.filter(is_active=True)
     serializer_class = BidSerializer
     http_method_names = ("get", "post")
-    filter_backends = [filters.SearchFilter]
-    search_fields = ('product', 'bidder', 'bid_completed_flag')
-    # filterset_fields = ['product', 'bidder', 'bid_completed_flag']
+    permission_classes = [Authenticated]
 
     def list(self, request, *args, **kwargs):
         if self.queryset:
@@ -56,8 +55,7 @@ class BidApplyViewSet(viewsets.ModelViewSet):
     queryset = BidApply.objects.filter(is_active=True)
     serializer_class = BidApplySerializer
     http_method_names = ("get", "post")
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['product', 'user']
+    permission_classes = [Authenticated]
 
     def list(self, request, *args, **kwargs):
         if self.queryset:

@@ -6,6 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from auction_plaza.utils.validation_error_utils import get_error_message_in_serializer
 from products.models import ProductCategory, Product, ProductImage
 from products.serializers import ProductCategorySerializer, ProductSerializer, ProductImageSerializer
+from users.auth_utils import Authenticated
 
 logger = logging.getLogger(__name__)
 
@@ -16,6 +17,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     http_method_names = ("get")
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['category', 'name', 'description', 'initial_price']
+    permission_classes = [Authenticated]
 
     def list(self, request, *args, **kwargs):
         serializer = self.get_serializer(self.queryset, many=True)
