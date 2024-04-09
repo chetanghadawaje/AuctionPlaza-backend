@@ -1,7 +1,7 @@
 import logging
 
 from rest_framework.response import Response
-from rest_framework import viewsets, status
+from rest_framework import viewsets, status, filters
 from rest_framework.exceptions import ValidationError
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -23,8 +23,9 @@ class BidViewSet(viewsets.ModelViewSet):
     queryset = Bid.objects.filter(is_active=True)
     serializer_class = BidSerializer
     http_method_names = ("get", "post")
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['product', 'bidder', 'bid_completed_flag']
+    filter_backends = [filters.SearchFilter]
+    search_fields = ('product', 'bidder', 'bid_completed_flag')
+    # filterset_fields = ['product', 'bidder', 'bid_completed_flag']
 
     def list(self, request, *args, **kwargs):
         if self.queryset:

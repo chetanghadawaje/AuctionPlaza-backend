@@ -16,3 +16,6 @@ DB_PASSWORD = 'admin'
 
 # Redis
 REDIS_LOCATION = 'redis://127.0.0.1:6379/1'
+
+# JWT Token
+JWT_EXP_MIN = 60
