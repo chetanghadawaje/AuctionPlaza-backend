@@ -13,7 +13,6 @@ def create_token(user):
     try:
         payload = {
             "id": user.id,
-            "iat": datetime.datetime.now(),
             "exp": datetime.datetime.now() + datetime.timedelta(minutes=settings.JWT_EXP_MIN)
         }
         token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")

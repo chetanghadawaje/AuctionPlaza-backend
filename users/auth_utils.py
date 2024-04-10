@@ -5,6 +5,7 @@ from rest_framework import exceptions
 from rest_framework.permissions import IsAuthenticated
 
 from users.jwt_utils import decode_token
+from users.models import Users
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +21,7 @@ class Authenticated(IsAuthenticated):
             if token_data_dict.get("exp") < datetime.datetime.now():
                 raise exceptions.AuthenticationFailed(detail=_("Token expired"))
             if token_data_dict.get("id"):
-                user_obj = User.objects.filter(pk=token_data_dict.get("id")).first()
+                user_obj = Users.objects.filter(pk=token_data_dict.get("id")).first()
                 if user_obj is None:
                     raise exceptions.AuthenticationFailed(detail=_("User not found"))
             return True

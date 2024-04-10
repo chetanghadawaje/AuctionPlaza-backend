@@ -1,9 +1,6 @@
-from datetime import datetime
-
 from rest_framework import serializers
 
 from bids.models import Bid, BidApply
-from products.models import Product
 
 
 class BidSerializer(serializers.ModelSerializer):
