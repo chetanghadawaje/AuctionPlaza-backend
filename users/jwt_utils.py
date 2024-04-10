@@ -2,6 +2,7 @@ import datetime
 import jwt
 
 from django.conf import settings
+from rest_framework import exceptions
 
 
 def create_token(user):
@@ -9,13 +10,16 @@ def create_token(user):
     Create token for user
     :user : user object
     """
-    payload = {
-        "id": user.id,
-        "iat": datetime.datetime.now(),
-        "exp": datetime.datetime.now() + datetime.timedelta(minutes=settings.JWT_EXP_MIN)
-    }
-    token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
-    return token
+    try:
+        payload = {
+            "id": user.id,
+            "iat": datetime.datetime.now(),
+            "exp": datetime.datetime.now() + datetime.timedelta(minutes=settings.JWT_EXP_MIN)
+        }
+        token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
+        return token
+    except Exception as _:
+        raise exceptions.AuthenticationFailed(_("Invalid token."))
 
 
 def decode_token(token) -> dict:
