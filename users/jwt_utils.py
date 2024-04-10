@@ -18,7 +18,7 @@ def create_token(user):
         token = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
         return token
     except Exception as _:
-        raise exceptions.AuthenticationFailed(_("Invalid token."))
+        raise exceptions.AuthenticationFailed(detail="Invalid token.")
 
 
 def decode_token(token) -> dict:

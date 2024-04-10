@@ -1,7 +1,7 @@
 import logging
 
 from rest_framework import viewsets, status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 
@@ -15,11 +15,13 @@ logger = logging.getLogger(__name__)
 
 
 @api_view(['GET'])
+@permission_classes([Authenticated])
 def bid_polling(request, bid_id):
     """
     This api get all live details using redis or database when needed
     """
-    # TODO insert data in cache for live
+    request.session.get('user_id', None)
+    BidCaches.live_user_added(bid_id, request.session.get('user_id', 1))
     live_user = BidCaches.live_user_count(bid_id)
     users_bids = BidCaches.get_list_of_bid(bid_id)
     data = [{"bids": users_bids, "live_user": live_user}]
@@ -46,6 +48,10 @@ class BidViewSet(viewsets.ModelViewSet):
         try:
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            bid_id = serializer.validated_data.get('product').bid_id.hex
+            cache_data = {"product": serializer.data.get("product"), "bidder": serializer.data.get("bidder"),
+                          "bid_amount": serializer.data.get("bid_amount"), "bid_time": serializer.data.get("bid_time")}
+            BidCaches.create_list_for_bids(bid_id, serializer.data.get('id'), cache_data)
             data, message, status_code = serializer.data, 'Bid created successfully', status.HTTP_201_CREATED
         except ValidationError:
             data, message, status_code = [], get_error_message_in_serializer(serializer), status.HTTP_400_BAD_REQUEST
@@ -77,8 +83,6 @@ class BidApplyViewSet(viewsets.ModelViewSet):
         try:
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            # TODO abc replace bid id
-            BidCaches.create_list_for_bids("abc", serializer.data.get('user'), serializer.data)
             data, message, status_code = serializer.data, 'Bid apply successfully', status.HTTP_201_CREATED
         except ValidationError:
             data, message, status_code = [], get_error_message_in_serializer(serializer), status.HTTP_400_BAD_REQUEST

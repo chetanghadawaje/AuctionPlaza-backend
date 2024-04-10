@@ -15,7 +15,7 @@ class BidCaches:
         ttl is set default is 10 seconds.
         """
         flag = cache.set(f"live_{bid_id}_{str(user_id)}", str(user_id), ttl)
-        logger.info(f"Live user information added to cache. Flag: {flag} | Bid: {bid_id} | User: {user_id}")
+        logger.info(f"Live user information added to cache. Flag: {str(flag)} | Bid: {bid_id} | User: {user_id}")
 
     @classmethod
     def live_user_count(cls, bid_id: str) -> int:
@@ -23,7 +23,7 @@ class BidCaches:
         This function is used to get how may live user for bids
         """
         list_user = cache.get(f"live_{bid_id}*")
-        live_count = len(list_user)
+        live_count = len(list_user) if list_user else 0
         return live_count
 
     @classmethod
@@ -32,7 +32,7 @@ class BidCaches:
         This function create list for all bids user in live time
         """
         flag = cache.hmset(f'user_bid_{bid_id}_{str(user_id)}', user_data)
-        logger.info(f"Bid related data added in cache. Flag: {flag} | Bid: {bid_id} | User: {user_data}")
+        logger.info(f"Bid related data added in cache. Flag: {str(flag)} | Bid: {bid_id} | User: {user_data}")
 
     @classmethod
     def get_list_of_bid(cls, bid_id: str):
@@ -40,5 +40,5 @@ class BidCaches:
         This function get list for bids
         """
         list_user_bids = cache.get(f'user_bid_{bid_id}_*')
-        list_of_data = [cache.get(bid) for bid in list_user_bids]
+        list_of_data = [cache.get(bid) for bid in list_user_bids] if list_user_bids else []
         return list_of_data
