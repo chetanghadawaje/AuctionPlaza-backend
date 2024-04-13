@@ -22,8 +22,8 @@ def bid_polling(request, bid_id):
     """
     request.session.get('user_id', None)
     BidCaches.live_user_added(bid_id, request.session.get('user_id', 1))
+    users_bids = BidCaches.get_list_of_bid(bid_id, ["product", "bidder", "bid_amount", "bid_time"])
     live_user = BidCaches.live_user_count(bid_id)
-    users_bids = BidCaches.get_list_of_bid(bid_id)
     data = [{"bids": users_bids, "live_user": live_user}]
     return Response({"Data": data, "Message": "Data fetched successfully", 'Status': status.HTTP_200_OK}, status=status.HTTP_200_OK)
 

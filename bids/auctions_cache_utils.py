@@ -22,7 +22,7 @@ class BidCaches:
         """
         This function is used to get how may live user for bids
         """
-        list_user = cache.get(f"live_{bid_id}*")
+        list_user = cache.keys(f"live_{bid_id}*")
         live_count = len(list_user) if list_user else 0
         return live_count
 
@@ -35,10 +35,10 @@ class BidCaches:
         logger.info(f"Bid related data added in cache. Flag: {str(flag)} | Bid: {bid_id} | User: {user_data}")
 
     @classmethod
-    def get_list_of_bid(cls, bid_id: str):
+    def get_list_of_bid(cls, bid_id: str, fields: list):
         """
         This function get list for bids
         """
-        list_user_bids = cache.get(f'user_bid_{bid_id}_*')
-        list_of_data = [cache.get(bid) for bid in list_user_bids] if list_user_bids else []
+        list_user_bids = cache.keys(f'user_bid_{bid_id}_*')
+        list_of_data = [{k: v for k, v in zip(fields, cache.hmget(bid.decode("utf-8"), fields))} for bid in list_user_bids] if list_user_bids else []
         return list_of_data
