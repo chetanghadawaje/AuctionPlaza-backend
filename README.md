@@ -82,3 +82,29 @@
   - Authorization: {{token}}
 
 ---
+
+## Create Product
+
+**Description:** Create a new product.
+
+- **Method:** POST
+- **URL:** http://127.0.0.1:8000/api/v1/products/add/product/
+- **Body:**
+  ```json
+  {
+    "category": "electronics",
+    "name": "SmartPhone",
+    "description": "SmartPhone with 8GB RAM and 256 Memory",
+    "initial_price": 14999.00,
+    "auction_date_time": "2024-03-15T12:00:00",
+    "status": "upcoming"
+  }
+  
+---
+## Retrieve Products By Category
+
+**Description:** Retrieve products for a specific category.
+
+- **Method:** GET
+- **URL:** http://127.0.0.1:8000/api/v1/products/category/electronics
+
