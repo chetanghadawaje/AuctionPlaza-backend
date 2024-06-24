@@ -4,7 +4,7 @@ This file maintain all type configration and settings need as per environment.
 
 # Django
 SECRET_KEY = 'django-insecure-fiir2nh-2ji@mf1pwe^yr*abo1mvna^_u9vv=2upthhbd#u@q-'
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 DEBUG = True
 
 # Database
